@@ -15,12 +15,15 @@ use sprs::CsVecOwned;
 
 use super::data::Record;
 use super::metrics::similarity::Similarity;
+use super::metrics::evaluator::Evaluator;
 
 pub trait Recommender {
     /// Predicts the rating a user would give to an item.
     fn predict(&self, user_id: &str, item_id: &str) -> Result<f64, String>;
     /// Returns a vector of Item IDs and predicted ratings sorted by rating.
     fn recommend(&self, user_id: &str) -> Vec<(String, f64)>;
+    /// Returns a vector of Item IDs and predicted ratings sorted by rating.
+    fn evaluate<T: Evaluator>(&self, evaluator: T) -> f64;
 }
 
 /// K-nearest neigbors user based recommender.
@@ -139,5 +142,8 @@ impl Recommender for KnnUserRecommender {
         }).collect::<Vec<(String, f64)>>();
         recommendations.sort_by(|&(_, x), &(_, y)| y.partial_cmp(&x).unwrap());
         recommendations
+    }
+    fn evaluate(&self, evaluator: Evaluator) -> f64 {
+        0.0
     }
 }
