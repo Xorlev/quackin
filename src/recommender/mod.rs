@@ -15,7 +15,7 @@ use sprs::CsVecOwned;
 
 use super::data::Record;
 use super::metrics::similarity::Similarity;
-use super::metrics::evaluator::Evaluator;
+use super::metrics::evaluator::{Evaluator,Measures};
 
 pub trait Recommender {
     /// Predicts the rating a user would give to an item.
@@ -35,12 +35,13 @@ pub struct KnnUserRecommender {
     item_ids: Vec<String>,
     ratings: HashMap<usize, CsVecOwned<f64>>,
     similarity: Similarity,
+    evaluator: Measures,
     n_neighbors: usize
 }
 
 impl KnnUserRecommender {
     /// Constructs a new recommender from a slice of records.
-    pub fn from_records(records: &[Record], similarity: Similarity, n_neighbors: usize) -> Self {
+    pub fn from_records(records: &[Record], similarity: Similarity, n_neighbors: usize, evaluator: Measures) -> Self {
         let mut user_indices = HashMap::<String, usize>::new();
         let mut item_indices = HashMap::<String, usize>::new();
         let mut user_ids = Vec::new();
@@ -92,6 +93,7 @@ impl KnnUserRecommender {
             item_ids: item_ids,
             ratings: ratings,
             similarity: similarity,
+            evaluator: evaluator,
             n_neighbors: n_neighbors
         }
     }
@@ -143,7 +145,8 @@ impl Recommender for KnnUserRecommender {
         recommendations.sort_by(|&(_, x), &(_, y)| y.partial_cmp(&x).unwrap());
         recommendations
     }
-    fn evaluate(&self, evaluator: Evaluator) -> f64 {
+    fn evaluate<T: Evaluator>(&self, evaluator: T) -> f64 {
         0.0
+        //evaluator.evaluate()
     }
 }

@@ -32,7 +32,6 @@ pub enum Field {
     ItemID,
     Rating,
     Other,
-    Evaluator,
 }
 
 /// Options when reading a csv file
@@ -47,7 +46,7 @@ impl ReadOptions {
     /// and that the columns are in the order `UserID`, `ItemID`, `Rating`
     pub fn default() -> Self {
         Self {
-            fields: vec![Field::UserID, Field::ItemID, Field::Rating, Field::Evaluator],
+            fields: vec![Field::UserID, Field::ItemID, Field::Rating],
             has_headers: false,
             delimiter: ','
         }

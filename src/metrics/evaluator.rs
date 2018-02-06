@@ -1,47 +1,25 @@
 
 
 pub trait Evaluator {
-    fn evaluate(test_data: Vec<f64>, reco_data: Vec<f64>) -> f64;
+    fn evaluate(&self, test_data: Vec<f64>, reco_data: Vec<f64>) -> f64;
 }
 
 pub enum Measures {
-    MSE(MSE),
-    RMSE(RMSE),
-    MAP(MAP),
-    Precision(Precision),
-    Recall(Recall),
-    NDCG(NDCG),
-    AUC(AUC),
+    MSE,
+    RMSE,
+    MAP,
+    Precision,
+    Recall,
 }
 
 impl Evaluator for Measures {
-    
-}
-
-pub struct MSE {
-
-}
-
-pub struct RMSE {
-
-}
-
-pub struct MAP {
-
-}
-
-pub struct Precision {
-
-}
-
-pub struct Recall {
-
-}
-
-pub struct NDCG {
-
-}
-
-pub struct AUC {
-
+    fn evaluate(&self, test_data: Vec<f64>, reco_data: Vec<f64>) -> f64 {
+        match *self {
+            Measures::MSE => 0.0,
+            Measures::RMSE => 0.0,
+            Measures::MAP => 0.0,
+            Measures::Precision => 0.0,
+            Measures::Recall => 0.0,            
+        }
+    }
 }

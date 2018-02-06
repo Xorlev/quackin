@@ -8,22 +8,28 @@ use quackin::data::Field::*;
 
 use quackin::recommender::{KnnUserRecommender, Recommender};
 use quackin::metrics::similarity::cosine;
+use quackin::metrics::evaluator::Measures;
 
 #[test]
 fn read_default_file_test() {
     let records = read_records("data/mock.csv").unwrap();
+    //assert_eq!(records[0].0.to_string(), "user_4".to_string())
 }
 
 #[test]
 fn read_file_with_headers_test() {
     let options = ReadOptions::custom(vec![UserID, ItemID, Rating], true, ',');
     let records = read_custom_records("data/mock_headers.csv", options).unwrap();
+    //assert_eq!(records[0].0.to_string(), "user_1".to_string())
+
 }
 
 #[test]
 fn read_file_with_custom_separator_test() {
     let options = ReadOptions::custom(vec![UserID, ItemID, Rating], true, '?');
     let records = read_custom_records("data/mock_separator.csv", options).unwrap();
+    //println!("{:?}", records[0].0.to_string());
+    //assert_eq!(records[0].0.to_string(), "user_1".to_string())
 }
 
 #[test]
@@ -35,7 +41,7 @@ fn read_file_with_more_columns_test() {
 #[test]
 fn knn_user_recommender_test() {
     let records = read_records("data/mock.csv").unwrap();
-    let recommender = KnnUserRecommender::from_records(&records, cosine, 5);
+    let recommender = KnnUserRecommender::from_records(&records, cosine, 5, Measures::RMSE);
 
     let some_uir = vec![("user_2", "item_3", 2.5192531497347637),
                         ("user_1", "item_3", 2.9524340130950657),
