@@ -6,10 +6,7 @@ extern crate structopt;
 extern crate structopt_derive;
 extern crate quackin;
 extern crate failure;
-//use std::fs::File;
-//use std::io::prelude::*;
 
-//use log::Level;
 use structopt::StructOpt;
 use quackin::build_quackin;
 use failure::Error;
@@ -38,7 +35,13 @@ fn quackin(args: Args) -> Result<(), Error> {
         args.split,
         args.reco,
     )?;
-    
+
+    info!("Building model started");
+    quackin.build_model();
+
+    info!("Evaluation");
+    quackin.evaluate();
+
     Ok(())
 }
 

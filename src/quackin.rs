@@ -8,3 +8,12 @@ pub struct Quackin {
     pub reco: String,
 }
 
+impl Quackin {
+    pub fn build_model(&self){
+
+    }
+
+    pub fn evaluate(&self){
+
+    }
+}
