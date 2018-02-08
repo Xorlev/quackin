@@ -8,7 +8,6 @@ use quackin::data::Field::*;
 
 use quackin::recommender::{KnnUserRecommender, Recommender};
 use quackin::metrics::similarity::cosine;
-use quackin::metrics::evaluator::Measures;
 
 #[test]
 fn read_default_file_test() {
@@ -41,7 +40,7 @@ fn read_file_with_more_columns_test() {
 #[test]
 fn knn_user_recommender_test() {
     let records = read_records("data/mock.csv").unwrap();
-    let recommender = KnnUserRecommender::from_records(&records, cosine, 5, Measures::RMSE);
+    let recommender = KnnUserRecommender::from_records(&records, cosine, 5);
 
     let some_uir = vec![("user_2", "item_3", 2.5192531497347637),
                         ("user_1", "item_3", 2.9524340130950657),

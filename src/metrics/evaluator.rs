@@ -1,10 +1,5 @@
-
-
-pub trait Evaluator {
-    fn evaluate(&self, test_data: Vec<f64>, reco_data: Vec<f64>) -> f64;
-}
-
-pub enum Measures {
+#[derive(Debug)]
+pub enum Evaluator {
     MSE,
     RMSE,
     MAP,
@@ -12,14 +7,24 @@ pub enum Measures {
     Recall,
 }
 
-impl Evaluator for Measures {
-    fn evaluate(&self, test_data: Vec<f64>, reco_data: Vec<f64>) -> f64 {
-        match *self {
-            Measures::MSE => 0.0,
-            Measures::RMSE => 0.0,
-            Measures::MAP => 0.0,
-            Measures::Precision => 0.0,
-            Measures::Recall => 0.0,            
+impl Evaluator {
+    pub fn evaluate(self, test_data: Vec<f64>, reco_data: Vec<f64>) -> f64 {
+        match self {
+            Evaluator::MSE => {
+                0.0
+            },
+            Evaluator::RMSE => {
+                0.0
+            },
+            Evaluator::MAP => {
+                0.0
+            },
+            Evaluator::Precision => {
+                0.0
+            },
+            Evaluator::Recall => {
+                0.0
+            },
         }
     }
-}
+ }

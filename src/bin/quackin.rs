@@ -5,11 +5,15 @@ extern crate structopt;
 #[macro_use]
 extern crate structopt_derive;
 extern crate quackin;
+extern crate failure;
 //use std::fs::File;
 //use std::io::prelude::*;
 
 //use log::Level;
 use structopt::StructOpt;
+use quackin::build_quackin;
+use failure::Error;
+use log::Level;
 
 #[derive(StructOpt, Debug)]
 struct Args {
@@ -21,15 +25,18 @@ struct Args {
     evaluator: String,
     /// Split Train/Test in percents.
     #[structopt(short = "s", long = "split", default_value = "80")]
-    print_stats: u32,
+    split: u32,
+    /// Recommender method to use.
+    #[structopt(short = "r", long = "reco", default_value = "knnuser")]
+    reco: String,
 }
 
 fn quackin(args: Args) -> Result<(), Error> {
     let quackin = build_quackin(
         args.input,
-        !args.disable_geom,
-        args.libpostal_path.into(),
-        args.country_code,
+        args.evaluator,
+        args.split,
+        args.reco,
     )?;
     
     Ok(())
@@ -55,4 +62,3 @@ fn main() {
         _ => (),
     }    
 }
-

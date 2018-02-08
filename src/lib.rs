@@ -77,41 +77,34 @@
 //! ```
 //! Not bad! we aren't that far from the real rating. Now you can start recommending
 //! movies to everyone!
+#[macro_use]
+extern crate failure;
 extern crate csv;
 extern crate sprs;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 pub mod data;
 pub mod recommender;
 pub mod metrics;
+pub mod quackin;
+
+use failure::Error;
+use quackin::Quackin;
 
 pub fn build_quackin(
-    pbf_path: String,
-    with_geom: bool,
-    libpostal_file_path: PathBuf,
-    country_code: Option<String>,
-) -> Result<Cosmogony, Error> {
-    let path = Path::new(&pbf_path);
-    let file = File::open(&path).context("no pbf file")?;
-
-    let mut parsed_pbf = OsmPbfReader::new(file);
-
-    let (mut zones, mut stats) = if with_geom {
-        get_zones_and_stats(&mut parsed_pbf)?
-    } else {
-        get_zones_and_stats_without_geom(&mut parsed_pbf)?
+    input: String,
+    evaluator: String,
+    split: u32,
+    reco: String,
+) -> Result<Quackin, Error> {
+    info!("Building Quackin with file: {} for reco: {} evaluated by {} with a {}% split.", input, reco, evaluator, split);
+    let quackin = Quackin {
+        input: input,
+        evaluator: evaluator,
+        split: split,
+        reco: reco,
     };
-
-    create_ontology(&mut zones, &mut stats, libpostal_file_path, country_code)?;
-
-    let cosmogony = Cosmogony {
-        zones: zones,
-        meta: CosmogonyMetadata {
-            osm_filename: path.file_name()
-                .and_then(|f| f.to_str())
-                .map(|f| f.to_string())
-                .unwrap_or("invalid file name".into()),
-            stats: stats,
-        },
-    };
-    Ok(cosmogony)
+    Ok(quackin)
 }
